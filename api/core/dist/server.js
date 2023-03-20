@@ -12,7 +12,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/api', routes_1.routes);
+app.use('/', routes_1.routes);
 app.get('/', function (req, res) {
     res.send('Hello!');
 });
