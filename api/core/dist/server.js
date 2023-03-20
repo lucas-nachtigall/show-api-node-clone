@@ -12,12 +12,12 @@ const cors = require('cors');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(routes_1.routes);
+app.use('/', routes_1.routes);
 app.get('/', function (req, res) {
     res.send('Hello!');
 });
 if (!module.parent) {
-    app.listen(3000);
+    app.listen(port);
     console.log('Express started on port 3000');
 }
 exports.default = app;
