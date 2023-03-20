@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes = void 0;
+const express_1 = require("express");
+const session_route_1 = require("./session.route");
+const challenger_route_1 = require("./challenger.route");
+const question_routes_1 = require("./question.routes");
+const routes = (0, express_1.Router)();
+exports.routes = routes;
+routes.use("/session", session_route_1.sessionRoute);
+routes.use("/challenger", challenger_route_1.challengerRoute);
+routes.use("/question", question_routes_1.questionRoute);

@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
+}
+
+model Session {
+  id                  Int      @id @default(autoincrement())
+  sessionName         String   @unique @map("session_name") @db.VarChar(150)
+  createdAt           DateTime @default(now()) @map("created_at")
+  numberOfQuestions   Int      @map("number_of_questions") @db.Int
+  numberOfChallengers Int      @map("number_of_challengers") @db.Int
+  numberOfGroups      Int      @map("number_of_groups") @db.Int
+  cards               Boolean  @default(false) @map("cards") @db.TinyInt
+  studentsHelp        Boolean  @default(false) @map("students_help") @db.TinyInt
+  skips               Boolean  @default(false) @map("skips") @db.TinyInt
+  audienceHelp        Boolean  @default(false) @map("audience_help") @db.TinyInt
+
+  challengers Challenger[]
+  Question    Question[]
+
+  @@map("tb_session")
+}
+
+model Challenger {
+  id               Int    @id @default(autoincrement())
+  challengerName   String @map("challenger_name") @db.VarChar(150)
+  score            Int    @map("score") @db.Int
+  cardsLeft        Int    @map("cards_left") @db.Int
+  studentsHelpLeft Int    @map("students_help_left") @db.Int
+  skipsLeft        Int    @map("skips_left") @db.Int
+  audienceHelpLeft Int    @map("audience_help_left") @db.Int
+
+  sessionId Int     @map("session_id") @db.Int
+  session   Session @relation(fields: [sessionId], references: [id])
+
+  @@map("tb_challenger")
+}
+
+model Question {
+  id                   Int      @id @default(autoincrement())
+  questionDescription  String   @map("question_description") @db.VarChar(255)
+  type                 String   @map("type") @db.VarChar(150)
+  level                String   @map("level") @db.VarChar(150)
+  multipleChoiceAnswer Int?     @map("multiple_choice_answer") @db.Int
+  trueOrFalseAnswer    Boolean? @map("true_or_false_answer") @db.TinyInt
+
+  sessionId Int     @map("session_id") @db.Int
+  session   Session @relation(fields: [sessionId], references: [id])
+
+  options Option?
+
+  @@map("tb_question")
+}
+
+model Option {
+  id      Int     @id @default(autoincrement())
+  option1 String  @map("option1") @db.VarChar(255)
+  option2 String  @map("option2") @db.VarChar(255)
+  option3 String? @map("option3") @db.VarChar(255)
+  option4 String? @map("option4") @db.VarChar(255)
+
+  questionId Int      @unique @map("question_id") @db.Int
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@map("tb_option")
+}

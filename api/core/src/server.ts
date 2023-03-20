@@ -1,36 +1,22 @@
 
 import express from 'express';
+import {routes} from "./routes";
 
-var app = express();
 
-const users = [
-  {
-      id: 1,
-      name: "Lucas"
-  },
-  {
-      id: 2,
-      name: "Eric"
-  },
-  {
-      id: 3,
-      name: "Ana"
-  },
-];
+const app = express();
+const bodyParser = require('body-parser')
+const port = process.env.PORT || 3000;
+const cors = require('cors');
 
+app.use(cors());
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(routes)
 
 app.get('/', function(req:any, res:any){
   res.send('Hello!');
 });
 
-app.get('/users', function(req:any, res:any){
-  res.send(users);
-});
-
-app.get('/users/:userId', function(req:any, res:any){
-  const user = users.filter((user) => user.id == req.params.userId);
-  res.send(user);
-});
 
 if (!module.parent) {
   app.listen(3000);
