@@ -1,6 +1,7 @@
 
 import express from 'express';
 import {routes} from "./routes";
+import {SessionService} from "./modules/session/SessionService";
 
 
 const app = express();
@@ -15,6 +16,14 @@ app.use('/',routes)
 
 app.get('/', function(req:any, res:any){
   res.send('Hello!');
+});
+
+app.get('/teste', (req, res) => {
+  const service = new SessionService();
+
+  let allSessions = service.getAllSessions();
+
+  allSessions.then( a => res.send(a))
 });
 
 
