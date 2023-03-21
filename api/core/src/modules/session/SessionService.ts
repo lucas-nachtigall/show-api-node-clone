@@ -33,14 +33,19 @@ export class SessionService {
     }
 
     async getAllSessions(): Promise<SessionResponse[]> {
-        const sessionList = await prisma.session.findMany({});
+        try {
+            const sessionList = await prisma.session.findMany({});
 
-        let sessionResponseList: SessionResponse[] = [];
-        for (let session of sessionList) {
-            let sessionResponse = this.entityToResponse(session);
-            sessionResponseList.push(sessionResponse)
+            let sessionResponseList: SessionResponse[] = [];
+            for (let session of sessionList) {
+                let sessionResponse = this.entityToResponse(session);
+                sessionResponseList.push(sessionResponse)
+            }
+            return sessionResponseList;
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
-        return sessionResponseList;
     }
 
 
